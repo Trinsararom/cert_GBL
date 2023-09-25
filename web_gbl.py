@@ -24,6 +24,12 @@ def initialize_tesseract():
 # Initialize Tesseract
 initialize_tesseract()
 
+def process_cropped_images(img):
+    # Perform OCR on the cropped image
+    extracted_text = pytesseract.image_to_string(img)
+
+    return extracted_text
+
 def crop_image(img):
     # Get the dimensions of the original image
     height, width, channels = img.shape if len(img.shape) == 3 else (img.shape[0], img.shape[1], 1)
