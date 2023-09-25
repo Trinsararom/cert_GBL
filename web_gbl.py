@@ -11,11 +11,11 @@ import streamlit as st
 import numpy as np
 
 st.set_page_config(
-    page_title="Cert",
+    page_title="Cert GBL",
     layout = 'wide',
 )
 
-st.title('Cert Scraper')
+st.title('Cert Scraper GBL')
 
 # Initialize the Tesseract OCR
 def initialize_tesseract():
