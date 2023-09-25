@@ -349,7 +349,7 @@ if zip_file is not None:
                         df_list.append(result_df)
                 except Exception as e:
                     # Handle errors for this image, you can log or print the error message
-                    #st.error(f"Error processing image {image_file}: {str(e)}")
+                    st.error(f"Error processing image {image_file}: {str(e)}")
                     pass  # Skip to the next image
 
         # Concatenate all DataFrames into one large DataFrame
