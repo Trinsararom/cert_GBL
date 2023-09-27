@@ -128,25 +128,14 @@ def extract_gemstone_info(img):
 
     return df
 
-def detect_color(trade_color, color):
-    if trade_color:
-        trade_color = str(trade_color).lower()
-        if "pigeon blood red" in trade_color:
-            return "PigeonsBlood"
-        elif "royal blue" in trade_color:
-            return "RoyalBlue"
-        else:
-            return trade_color
-    elif color:
-        color = str(color).lower()
-        if "pigeon blood red" in color:
-            return "PigeonsBlood"
-        elif "royal blue" in color:
-            return "RoyalBlue"
-        else:
-            return color
+def detect_color(text):
+    text = str(text).lower()  # Convert the text to lowercase
+    if "pigeon blood red" in text:
+        return "PigeonsBlood"
+    elif "royal blue"  in text:
+        return "RoyalBlue"
     else:
-        return None  # Return None if neither "Tradeolour" nor "colour" is available
+        return text
     
 def detect_cut(cut):
     text = str(cut).lower()
@@ -200,32 +189,19 @@ def generate_indication(comment):
     else:
         return "Unheated"
     
-def generate_display_name(row):
-    trade_color = row["Tradecolour"]
-    color = row["Colour"]
-    detected_color = row["Detected_Color"]
-    origin = row["Detected_Origin"]
-    indication = row["Indication"]
-    comment = row["oldHeat"]
-
+def generate_display_name(color, Color_1, origin, indication, comment):
     display_name = ""
 
-    if trade_color:
-        trade_color = str(trade_color).lower()
+    if color is not None:
+        color = str(color).lower()  # Convert color to lowercase
         if indication == "Unheated":
-            display_name = f"GBL({detected_color})"
-        elif indication == "Heated":
-            display_name = f"GBL({detected_color})(H)"
-    elif color:
-        color = str(color).lower()
-        if indication == "Unheated":
-            display_name = f"GBL({detected_color})"
-        elif indication == "Heated":
-            display_name = f"GBL({detected_color})(H)"
-
-    if "(mogok, myanmar)" in str(origin).lower():
+            display_name = f"GBL({Color_1})"
+        if indication == "Heated": 
+            display_name = f"GBL({Color_1})(H)"
+    
+    if "(mogok, myanmar)" in str(origin).lower():  # Convert origin to lowercase for case-insensitive comparison
         display_name = "MG-" + display_name
-
+    
     return display_name
 
 # Define the function to extract the year and number from certNO
@@ -269,9 +245,9 @@ def rename_identification_to_stone(dataframe):
 # Define the function to perform all data processing steps
 def perform_data_processing(result_df):
     if "Tradecolour" in result_df and "Colour" in result_df:
-        result_df["Detected_Color"] = result_df.apply(lambda row: detect_color(row["Tradecolour"], row["Colour"]), axis=1)
+        result_df["Detected_Color"] = result_df.apply(lambda row: detect_color(row["Tradecolour"]), axis=1)
     elif "Colour" in result_df:
-        result_df["Detected_Color"] = result_df.apply(lambda row: detect_color(row["Colour"], row["Colour"]), axis=1)
+        result_df["Detected_Color"] = result_df.apply(lambda row: detect_color(row["Colour"]), axis=1)
         
     result_df["Detected_Cut"] = result_df["Cut"].apply(detect_cut)
     result_df["Detected_Shape"] = result_df["Shape"].apply(detect_shape)
