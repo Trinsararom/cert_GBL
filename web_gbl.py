@@ -128,14 +128,25 @@ def extract_gemstone_info(img):
 
     return df
 
-def detect_color(text):
-    text = str(text).lower()  # Convert the text to lowercase
-    if "pigeon blood red" in text:
-        return "PigeonsBlood"
-    elif "royal blue"  in text:
-        return "RoyalBlue"
+def detect_color(trade_color, color):
+    if trade_color:
+        trade_color = str(trade_color).lower()
+        if "pigeon blood red" in trade_color:
+            return "PigeonsBlood"
+        elif "royal blue" in trade_color:
+            return "RoyalBlue"
+        else:
+            return trade_color
+    elif color:
+        color = str(color).lower()
+        if "pigeon blood red" in color:
+            return "PigeonsBlood"
+        elif "royal blue" in color:
+            return "RoyalBlue"
+        else:
+            return color
     else:
-        return text
+        return None  # Return None if neither "Tradeolour" nor "colour" is available
     
 def detect_cut(cut):
     text = str(cut).lower()
@@ -245,7 +256,7 @@ def rename_identification_to_stone(dataframe):
 # Define the function to perform all data processing steps
 def perform_data_processing(result_df):
     
-    result_df["Detected_Color"] = result_df["Colour"].apply(detect_color)
+    result_df["Detected_Color"] = result_df.apply(lambda row: detect_color(row["Tradeolour"], row["colour"]), axis=1)
     result_df["Detected_Cut"] = result_df["Cut"].apply(detect_cut)
     result_df["Detected_Shape"] = result_df["Shape"].apply(detect_shape)
     result_df["Detected_Origin"] = result_df["Origin"].apply(detect_origin)
