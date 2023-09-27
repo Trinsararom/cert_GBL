@@ -278,7 +278,7 @@ def perform_data_processing(result_df):
     "length",
     "width",
     "height"
-    ]]
+    ,'Tradecolour']]
     
     return result_df
 
@@ -335,7 +335,8 @@ if zip_file is not None:
                             "carat",
                             "length",
                             "width",
-                            "height"
+                            "height",
+                            'Tradecolour'
                         ]]
                         result_df = result_df.rename(columns={
                             "Detected_Color": "Color",
