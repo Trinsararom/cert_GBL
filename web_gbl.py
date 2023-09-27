@@ -200,19 +200,32 @@ def generate_indication(comment):
     else:
         return "Unheated"
     
-def generate_display_name(color, Color_1, origin, indication, comment):
+def generate_display_name(row):
+    trade_color = row["Tradecolour"]
+    color = row["Colour"]
+    detected_color = row["Detected_Color"]
+    origin = row["Detected_Origin"]
+    indication = row["Indication"]
+    comment = row["oldHeat"]
+
     display_name = ""
 
-    if color is not None:
-        color = str(color).lower()  # Convert color to lowercase
+    if trade_color:
+        trade_color = str(trade_color).lower()
         if indication == "Unheated":
-            display_name = f"GBL({Color_1})"
-        if indication == "Heated": 
-            display_name = f"GBL({Color_1})(H)"
-    
-    if "(mogok, myanmar)" in str(origin).lower():  # Convert origin to lowercase for case-insensitive comparison
+            display_name = f"GBL({detected_color})"
+        elif indication == "Heated":
+            display_name = f"GBL({detected_color})(H)"
+    elif color:
+        color = str(color).lower()
+        if indication == "Unheated":
+            display_name = f"GBL({detected_color})"
+        elif indication == "Heated":
+            display_name = f"GBL({detected_color})(H)"
+
+    if "(mogok, myanmar)" in str(origin).lower():
         display_name = "MG-" + display_name
-    
+
     return display_name
 
 # Define the function to extract the year and number from certNO
@@ -264,7 +277,7 @@ def perform_data_processing(result_df):
     result_df["Mogok"] = result_df["Origin"].apply(detect_mogok)
     result_df["Indication"] = result_df["Condition"].apply(generate_indication)
     result_df["oldHeat"] = result_df.apply(lambda row: detect_old_heat(row["Condition"], row["Indication"]), axis=1)
-    result_df["displayName"] = result_df.apply(lambda row: generate_display_name(row["Colour"], row['Detected_Color'], row["Detected_Origin"], row['Indication'], row['oldHeat']), axis=1)
+    result_df["displayName"] = result_df.apply(generate_display_name, axis=1)
     result_df = extract_cert_info(result_df, 'Report Number')
     result_df["carat"] = result_df["Weight"].apply(convert_carat_to_numeric)
     result_df[['length', 'width', 'height']] = result_df['Measurements'].str.replace(' mm', '').str.split(' x ', expand=True)
