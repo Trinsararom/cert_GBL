@@ -245,7 +245,7 @@ def rename_identification_to_stone(dataframe):
 # Define the function to perform all data processing steps
 def perform_data_processing(result_df):
     
-    result_df["Detected_Color"] = result_df["Tradecolour"].apply(detect_color)
+    result_df["Detected_Color"] = result_df["Colour"].apply(detect_color)
     result_df["Detected_Cut"] = result_df["Cut"].apply(detect_cut)
     result_df["Detected_Shape"] = result_df["Shape"].apply(detect_shape)
     result_df["Detected_Origin"] = result_df["Origin"].apply(detect_origin)
@@ -253,7 +253,7 @@ def perform_data_processing(result_df):
     result_df["Mogok"] = result_df["Origin"].apply(detect_mogok)
     result_df["Indication"] = result_df["Condition"].apply(generate_indication)
     result_df["oldHeat"] = result_df.apply(lambda row: detect_old_heat(row["Condition"], row["Indication"]), axis=1)
-    result_df["displayName"] = result_df.apply(lambda row: generate_display_name(row["Tradecolour"], row['Detected_Color'], row["Detected_Origin"], row['Indication'], row['oldHeat']), axis=1)
+    result_df["displayName"] = result_df.apply(lambda row: generate_display_name(row["Colour"], row['Detected_Color'], row["Detected_Origin"], row['Indication'], row['oldHeat']), axis=1)
     result_df = extract_cert_info(result_df, 'Report Number')
     result_df["carat"] = result_df["Weight"].apply(convert_carat_to_numeric)
     result_df[['length', 'width', 'height']] = result_df['Measurements'].str.replace(' mm', '').str.split(' x ', expand=True)
