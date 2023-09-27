@@ -256,7 +256,7 @@ def rename_identification_to_stone(dataframe):
 # Define the function to perform all data processing steps
 def perform_data_processing(result_df):
     
-    result_df["Detected_Color"] = result_df.apply(lambda row: detect_color(row["Tradeolour"], row["Colour"]), axis=1)
+    result_df["Detected_Color"] = result_df.apply(lambda row: detect_color(row["Tradecolour"], row["Colour"]), axis=1)
     result_df["Detected_Cut"] = result_df["Cut"].apply(detect_cut)
     result_df["Detected_Shape"] = result_df["Shape"].apply(detect_shape)
     result_df["Detected_Origin"] = result_df["Origin"].apply(detect_origin)
