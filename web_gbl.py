@@ -242,6 +242,9 @@ def rename_identification_to_stone(dataframe):
 
     return dataframe
 
+def detect_vibrant(Vibrant):
+    return str("(Vibrant)" in Vibrant)
+
 # Define the function to perform all data processing steps
 def perform_data_processing(result_df):
     result_df["Detected_Origin"] = result_df["Origin"].apply(detect_origin)
@@ -250,9 +253,11 @@ def perform_data_processing(result_df):
     
     if "Tradecolour" in result_df and "Colour" in result_df:
         result_df["Detected_Color"] = result_df.apply(lambda row: detect_color(row["Tradecolour"]), axis=1)
+        result_df['Vibrant'] = result_df["Detected_Color"].apply(detect_vibrant)
         result_df["displayName"] = result_df.apply(lambda row: generate_display_name(row["Tradecolour"], row['Detected_Color'], row["Detected_Origin"], row['Indication'], row['oldHeat']), axis=1)
     elif "Colour" in result_df:
         result_df["Detected_Color"] = result_df.apply(lambda row: detect_color(row["Colour"]), axis=1)
+        result_df['Vibrant'] = result_df["Detected_Color"].apply(detect_vibrant)
         result_df["displayName"] = result_df.apply(lambda row: generate_display_name(row["Colour"], row['Detected_Color'], row["Detected_Origin"], row['Indication'], row['oldHeat']), axis=1)
         
     result_df["Detected_Cut"] = result_df["Cut"].apply(detect_cut)
@@ -277,6 +282,7 @@ def perform_data_processing(result_df):
     "Indication",
     "oldHeat",
     "Mogok",
+    "Vibrant",
     "Detected_Cut",
     "Detected_Shape",
     "carat",
@@ -335,6 +341,7 @@ if zip_file is not None:
                             "Indication",
                             "oldHeat",
                             "Mogok",
+                            "Vibrant",
                             "Detected_Cut",
                             "Detected_Shape",
                             "carat",
