@@ -184,10 +184,10 @@ def detect_mogok(origin):
 
 def generate_indication(comment):
     comment = str(comment).lower()
-    if comment == "Indications of heating":
-        return "Heated"
-    else:
+    if "no indications of heating." in comment:
         return "Unheated"
+    else:
+        return "Heated"
     
 def generate_display_name(color, Color_1, origin, indication, comment):
     display_name = ""
