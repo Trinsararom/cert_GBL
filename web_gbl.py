@@ -147,6 +147,7 @@ def detect_cut(cut):
         return "cut"
     
 def detect_shape(shape):
+    shape = str(shape).lower()
     valid_shapes = [
         "cushion", "heart", "marquise", "octagonal", "oval",
         "pear", "rectangular", "round", "square", "triangular",
@@ -184,7 +185,7 @@ def detect_mogok(origin):
 
 def generate_indication(comment):
     comment = str(comment).lower()
-    if "no indications of heating." in comment:
+    if "no" in comment or 'te1' in comment:
         return "Unheated"
     else:
         return "Heated"
